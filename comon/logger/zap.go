@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
+	"time"
 )
 
 var _logger *zap.Logger
@@ -21,7 +22,8 @@ func ZapLoggerTest(data interface{}) {
 }
 func init() {
 	encoderConfig := zap.NewProductionEncoderConfig()
-	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	//encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeTime = customTimeEncoder
 	encoder := zapcore.NewJSONEncoder(encoderConfig)
 	fileWriteSyncer := getFileLogWriter()
 
@@ -53,4 +55,8 @@ func getFileLogWriter() (writeSyncer zapcore.WriteSyncer) {
 	}
 
 	return zapcore.AddSync(lumberJackLogger)
+}
+
+func customTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+	enc.AppendString(t.Format("2006-01-02 15:04:05"))
 }
