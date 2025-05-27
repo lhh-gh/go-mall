@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github/lhh-gh/go-mall/comon/app"
 	"github/lhh-gh/go-mall/comon/errcode"
 	"github/lhh-gh/go-mall/comon/logger"
 	"github/lhh-gh/go-mall/comon/middleware"
@@ -67,7 +68,35 @@ func main() {
 		})
 
 	})
+	g.GET("/response-list", func(c *gin.Context) {
 
+		pagination := app.NewPagination(c)
+		// Mock fetch list data from db
+		data := []struct {
+			Name string `json:"name"`
+			Age  int    `json:"age"`
+		}{
+			{
+				Name: "Lily",
+				Age:  26,
+			},
+			{
+				Name: "Violet",
+				Age:  25,
+			},
+		}
+		pagination.SetTotalRows(2)
+		app.NewResponse(c).SetPagination(pagination).Success(data)
+		return
+	})
+	g.GET("/response-error", func(c *gin.Context) {
+
+		baseErr := errors.New("a dao error")
+		// 这一步正式开发时写在service层
+		err := errcode.Wrap("encountered an error when xxx service did xxx", baseErr)
+		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
+		return
+	})
 	g.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 
 }
