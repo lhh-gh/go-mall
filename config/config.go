@@ -14,12 +14,11 @@ type appConfig struct {
 	Log  struct {
 		FilePath         string `mapstructure:"path"`
 		FileMaxSize      int    `mapstructure:"max_size"`
-		BackUpFileMaxAge int    `mapstructure:"max_days"`
+		BackUpFileMaxAge int    `mapstructure:"max_age"`
 	}
 }
 
 type databaseConfig struct {
-	//  数据库类型 mapstructure: 映射数据库字段
 	Type        string        `mapstructure:"type"`
 	DSN         string        `mapstructure:"dsn"`
 	MaxOpenConn int           `mapstructure:"maxopen""`

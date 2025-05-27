@@ -1,12 +1,14 @@
 package logger
 
 import (
+	"fmt"
 	"github.com/natefinch/lumberjack"
 	"github/lhh-gh/go-mall/comon/enum"
 	"github/lhh-gh/go-mall/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -52,6 +54,12 @@ func getFileLogWriter() (writeSyncer zapcore.WriteSyncer) {
 		MaxAge:    config.App.Log.BackUpFileMaxAge, // 旧文件最多保留90天
 		Compress:  false,
 		LocalTime: true,
+	}
+
+	// 添加错误处理
+	if err := os.MkdirAll(filepath.Dir(config.App.Log.FilePath), 0755); err != nil {
+		fmt.Printf("创建日志目录失败: %v\n", err)
+		return zapcore.AddSync(os.Stdout) // 如果创建目录失败，输出到控制台
 	}
 
 	return zapcore.AddSync(lumberJackLogger)
