@@ -60,15 +60,61 @@ func (e *AppError) WithCause(err error) *AppError {
 	return e
 }
 
+// newError 创建新的应用错误实例
+// 参数说明：
+//   - code: 错误码，必须大于等于0
+//   - msg: 错误信息
+//
+// 返回值：
+//   - *AppError: 返回新创建的错误实例
+//
+// 说明：
+//  1. 错误码必须大于等于0
+//  2. 错误码不能重复，重复时会触发panic
+//  3. 新创建的错误码会被记录到全局错误码映射中
 func newError(code int, msg string) *AppError {
-	if _, duplicated := codes[code]; duplicated {
-		panic(fmt.Sprintf("错误码 %d 不能重复, 请检查后更换", code))
+	// 检查错误码是否有效
+	if code < 0 {
+		panic("错误码必须大于等于0")
 	}
-	return &AppError{code: code, msg: msg}
+	// 检查错误码是否重复
+	if _, exists := codes[code]; exists {
+		panic(fmt.Sprintf("错误码 %d 已存在，请使用其他错误码", code))
+	}
+
+	// 记录新的错误码
+	codes[code] = struct{}{}
+
+	// 创建并返回错误实例
+	return &AppError{
+		code: code,
+		msg:  msg,
+	}
 }
+
+//func newError(code int, msg string) *AppError {
+//	if code > -1 {
+//		if _, duplicated := codes[code]; duplicated {
+//			panic(fmt.Sprintf("预定义错误码 %d 不能重复, 请检查后更换", code))
+//		}
+//		codes[code] = struct{}{}
+//	}
+//	return &AppError{code: code, msg: msg}
+//}
 
 // Wrap 用于逻辑中包装底层函数返回的error 和 WithCause 一样都是为了记录错误链条
 // 该方法生成的error 用于日志记录, 返回响应请使用预定义好的error
+//
+//	func Wrap(msg string, err error) *AppError {
+//		if err == nil {
+//			return nil
+//		}
+//		appErr := &AppError{code: -1, msg: msg, cause: err}
+//		appErr.occurred = getAppErrOccurredInfo()
+//		return appErr
+//	}
+//
+// ，当你拿到一个error不确定它该是什么错误，你就用这个Wrap方法包装
 func Wrap(msg string, err error) *AppError {
 	if err == nil {
 		return nil

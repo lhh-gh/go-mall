@@ -2,7 +2,8 @@ package errcode
 
 import "net/http"
 
-var codes = map[int]string{}
+// codes 用于存储已定义的错误码，防止重复定义
+var codes = make(map[int]struct{})
 
 // 此处为公共的错误码, 预留 10000000 ~ 10000099 间的 100 个错误码
 var (
@@ -14,6 +15,26 @@ var (
 	ErrToken           = newError(10000004, "Token无效")
 	ErrForbidden       = newError(10000005, "未授权") // 访问一些未授权的资源时的错误
 	ErrTooManyRequests = newError(10000006, "请求过多")
+	ErrCoverData       = newError(10000007, "ConvertDataError") // 数据转换错误
+)
+
+// 用户模块相关错误码 10000100 ~ 1000199
+var (
+	ErrUserInvalid      = newError(10000101, "用户异常")
+	ErrUserNameOccupied = newError(10000102, "用户名已被占用")
+	ErrUserNotRight     = newError(10000103, "用户名或密码不正确")
+)
+
+// 商品模块相关错误码 10000200 ~ 1000299
+var (
+	ErrCommodityNotExists = newError(10000200, "商品不存在")
+	ErrCommodityStockOut  = newError(10000201, "库存不足")
+)
+
+// 购物车模块相关错误码 10000300 ～ 1000399
+var (
+	ErrCartItemParam = newError(10000300, "购物项参数异常")
+	ErrCartWrongUser = newError(10000301, "用户购物信息不匹配")
 )
 
 // 各个业务模块自定义的错误码, 从 10000100 开始, 可以按照不同的业务模块划分不同的号段
