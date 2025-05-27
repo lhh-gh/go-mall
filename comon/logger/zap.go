@@ -45,6 +45,9 @@ func init() {
 	}
 	core := zapcore.NewTee(cores...)
 	_logger = zap.New(core)
+
+	// 初始化 v1Logger
+	InitV1Logger(_logger)
 }
 func getFileLogWriter() (writeSyncer zapcore.WriteSyncer) {
 	// 使用 lumberjack 实现 logger rotate
