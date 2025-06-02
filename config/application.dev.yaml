@@ -11,12 +11,18 @@ app:
 database:
   type: mysql
   master:
-    dsn: root:superpass@tcp(localhost:30306)/go_mall?charset=utf8&parseTime=True&loc=Asia%2FShanghai
+    dsn: root:root@tcp(localhost:3306)/go-mall?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
     maxopen: 100
     maxidle: 10
     maxlifetime: 300000000 # 300s 内可复用
   slave:
-    dsn: root:superpass@tcp(localhost:30306)/go_mall?charset=utf8&parseTime=True&loc=Asia%2FShanghai
+    dsn: root:root@tcp(localhost:3306)/go-mall?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+    maxopen: 100
+    maxidle: 10
+    maxlifetime: 300000000
+  nebule:
+    type: postgres
+    dsn: postgres://postgres:superpass@localhost:5432/go_mall?sslmode=disable
     maxopen: 100
     maxidle: 10
     maxlifetime: 300000000
