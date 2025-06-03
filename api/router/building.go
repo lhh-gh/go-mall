@@ -28,4 +28,6 @@ func registerBuildingRoutes(rg *gin.RouterGroup) {
 	g.GET("response-error", controller.TestResponseError)
 	// 测试GORM Loggeer
 	g.GET("gorm-logger-test", controller.TestGormLogger)
+	// 演示代码逻辑分层, 测试 Create Demo Order
+	g.POST("create-demo-order", controller.TestCreateDemoOrder)
 }
