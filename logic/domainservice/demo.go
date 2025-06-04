@@ -69,6 +69,7 @@ func (dds *DemoDomainSvc) GetDemos() ([]*do.DemoOrder, error) {
 
 	return demoOrders, nil
 }
+
 func (dds *DemoDomainSvc) CreateDemoOrder(demoOrder *do.DemoOrder) (*do.DemoOrder, error) {
 	// 生成订单号  先随便写个
 	demoOrder.OrderNo = "20240627596615375920904456"
@@ -86,3 +87,7 @@ func (dds *DemoDomainSvc) CreateDemoOrder(demoOrder *do.DemoOrder) (*do.DemoOrde
 	// 返回领域对象
 	return demoOrder, err
 }
+
+//func (dds *DemoDomainSvc) CreateDemoOrder(demoOrder *do.DemoOrder) (*do.DemoOrder, error) {
+//
+//}

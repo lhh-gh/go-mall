@@ -5,7 +5,9 @@ import (
 	"github/lhh-gh/go-mall/api/reply"
 	"github/lhh-gh/go-mall/api/request"
 	"github/lhh-gh/go-mall/comon/errcode"
+	"github/lhh-gh/go-mall/comon/logger"
 	"github/lhh-gh/go-mall/comon/util"
+	"github/lhh-gh/go-mall/dal/cache"
 	"github/lhh-gh/go-mall/logic/do"
 	"github/lhh-gh/go-mall/logic/domainservice"
 )
@@ -47,7 +49,13 @@ func (das *DemoAppSvc) CreateDemoOrder(orderRequest *request.DemoOrderCreate) (*
 
 	// 做一些其他的创建订单成功后的外围逻辑
 	// 比如异步发送创建订单创建通知
+	// TODO2 做一些其他的创建订单成功后的外围逻辑
+	// 比如异步发送创建订单创建通知
 
+	// 设置缓存和读取, 测试项目中缓存的使用, 没有其他任何意义
+	cache.SetDemoOrder(das.ctx, demoOrderDo)
+	cacheData, _ := cache.GetDemoOrder(das.ctx, demoOrderDo.OrderNo)
+	logger.New(das.ctx).Info("redis data", "data", cacheData)
 	replyDemoOrder := new(reply.DemoOrder)
 	err = util.CopyProperties(replyDemoOrder, demoOrderDo)
 	if err != nil {

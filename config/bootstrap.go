@@ -15,6 +15,7 @@ var configs embed.FS
 func init() {
 	env := os.Getenv("ENV")
 	vp := viper.New()
+
 	// 根据环境变量 ENV 决定要读取的应用启动配置
 	configFileStream, err := configs.ReadFile("application." + env + ".yaml")
 	if err != nil {
@@ -29,4 +30,5 @@ func init() {
 	vp.UnmarshalKey("app", &App)
 
 	vp.UnmarshalKey("database", &Database)
+	vp.UnmarshalKey("redis", &Redis)
 }
