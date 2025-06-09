@@ -8,6 +8,7 @@ import (
 	"github/lhh-gh/go-mall/comon/errcode"
 	"github/lhh-gh/go-mall/comon/logger"
 	"github/lhh-gh/go-mall/config"
+	"github/lhh-gh/go-mall/library"
 	"github/lhh-gh/go-mall/logic/appservice"
 	"net/http"
 )
@@ -138,4 +139,24 @@ func TestCreateDemoOrder(c *gin.Context) {
 	}
 
 	app.NewResponse(c).Success(reply)
+}
+func TestForHttpToolGet(c *gin.Context) {
+	ipDetail, err := library.NewWhoisLib(c).GetHostIpDetail()
+	if err != nil {
+		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
+		return
+	}
+
+	app.NewResponse(c).Success(ipDetail)
+}
+
+func TestForHttpToolPost(c *gin.Context) {
+
+	orderReply, err := library.NewDemoLib(c).TestPostCreateOrder()
+	if err != nil {
+		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
+		return
+	}
+
+	app.NewResponse(c).Success(orderReply)
 }

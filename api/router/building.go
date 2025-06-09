@@ -30,4 +30,8 @@ func registerBuildingRoutes(rg *gin.RouterGroup) {
 	g.GET("gorm-logger-test", controller.TestGormLogger)
 	// 演示代码逻辑分层, 测试 Create Demo Order
 	g.POST("create-demo-order", controller.TestCreateDemoOrder)
+	// 测试封装的httptool
+	g.GET("httptool-get-test", controller.TestForHttpToolGet)
+	g.GET("httptool-post-test", controller.TestForHttpToolPost)
+
 }
